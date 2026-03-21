@@ -262,22 +262,7 @@ espGui.IgnoreGuiInset = true
 espGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 espGui.Parent = playerGui
 
-local function makeLine(color)
-	local l = Instance.new("Frame")
-	l.BackgroundColor3 = color
-	l.BorderSizePixel = 0
-	l.AnchorPoint = Vector2.new(0.5, 0.5)
-	l.Parent = espGui
-	l.Visible = false
-	return l
-end
-
 local espColor = Color3.fromRGB(255, 50, 50)
-local lineTop    = makeLine(espColor)
-local lineBottom = makeLine(espColor)
-local lineLeft   = makeLine(espColor)
-local lineRight  = makeLine(espColor)
-local tracer     = makeLine(Color3.fromRGB(255, 200, 0))
 
 local espNameLabel = Instance.new("TextLabel")
 espNameLabel.BackgroundTransparency = 1
@@ -302,78 +287,79 @@ espDistLabel.Parent = espGui
 local camera = workspace.CurrentCamera
 local RS = game:GetService("RunService")
 
-local function worldToScreen(pos)
-	local sp, onScreen = camera:WorldToViewportPoint(pos)
-	return Vector2.new(sp.X, sp.Y), onScreen
-end
-
-local function setBox(line, x, y, w, h)
-	line.Position = UDim2.new(0, x, 0, y)
-	line.Size = UDim2.new(0, w, 0, h)
-	line.Visible = true
-end
-
-local function drawTracer(from, to)
-	local dx = to.X - from.X
-	local dy = to.Y - from.Y
-	local len = math.sqrt(dx*dx + dy*dy)
-	tracer.Position = UDim2.new(0, from.X + dx/2, 0, from.Y + dy/2)
-	tracer.Size = UDim2.new(0, len, 0, 2)
-	tracer.Rotation = math.deg(math.atan2(dy, dx))
-	tracer.Visible = true
-end
-
-local function hideESP()
-	lineTop.Visible = false lineBottom.Visible = false
-	lineLeft.Visible = false lineRight.Visible = false
-	tracer.Visible = false
-	espNameLabel.Visible = false espDistLabel.Visible = false
-end
-
+local espHighlight = nil
+local tracerLine = nil
 local espConnection = nil
 
-local function startESP(targetPlayer)
+local function hideESP()
+	if espHighlight then espHighlight:Destroy() espHighlight = nil end
+	if tracerLine then tracerLine:Remove() tracerLine = nil end
 	if espConnection then espConnection:Disconnect() espConnection = nil end
+	espNameLabel.Visible = false
+	espDistLabel.Visible = false
+end
+
+local function startESP(targetPlayer)
 	hideESP()
 	if not targetPlayer then return end
 
+	if espHighlight then espHighlight:Destroy() end
+	espHighlight = Instance.new("Highlight")
+	espHighlight.FillTransparency = 0.6
+	espHighlight.OutlineTransparency = 0
+	espHighlight.FillColor = Color3.fromRGB(255, 0, 0)
+	espHighlight.OutlineColor = Color3.fromRGB(255, 50, 50)
+	espHighlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	espHighlight.Adornee = targetPlayer.Character
+	espHighlight.Parent = workspace
+
+	tracerLine = Drawing.new("Line")
+	tracerLine.Visible = true
+	tracerLine.Color = Color3.fromRGB(255, 200, 0)
+	tracerLine.Thickness = 2
+	tracerLine.Transparency = 1
+
 	espConnection = RS.RenderStepped:Connect(function()
-		if not targetPlayer or not targetPlayer.Character then hideESP() return end
+		if not targetPlayer or not targetPlayer.Character then
+			hideESP() return
+		end
+
 		local tChar = targetPlayer.Character
 		local tHRP = tChar:FindFirstChild("HumanoidRootPart")
 		local tHead = tChar:FindFirstChild("Head")
 		if not tHRP or not tHead then hideESP() return end
 
-		local topSP, topOn   = worldToScreen(tHRP.Position + Vector3.new(0, 3.2, 0))
-		local botSP, botOn   = worldToScreen(tHRP.Position + Vector3.new(0, -3.2, 0))
-		if not topOn and not botOn then hideESP() return end
+		if espHighlight and espHighlight.Adornee ~= tChar then
+			espHighlight.Adornee = tChar
+		end
 
-		local boxH = math.abs(botSP.Y - topSP.Y)
-		local boxW = boxH * 0.55
-		local boxX = topSP.X - boxW / 2
-		local boxY = topSP.Y
-		local thick = 2
-
-		setBox(lineTop,    boxX,         boxY,          boxW, thick)
-		setBox(lineBottom, boxX,         boxY + boxH,   boxW, thick)
-		setBox(lineLeft,   boxX,         boxY,          thick, boxH + thick)
-		setBox(lineRight,  boxX + boxW,  boxY,          thick, boxH + thick)
-
+		local headSP, onScreen = camera:WorldToViewportPoint(tHead.Position)
 		local vp = camera.ViewportSize
-		local screenBot = Vector2.new(vp.X / 2, vp.Y)
-		local headSP = worldToScreen(tHead.Position)
-		drawTracer(screenBot, headSP)
 
-		espNameLabel.Text = targetPlayer.Name
-		espNameLabel.Size = UDim2.new(0, 120, 0, 16)
-		espNameLabel.Position = UDim2.new(0, topSP.X - 60, 0, topSP.Y - 18)
-		espNameLabel.Visible = true
+		if onScreen and headSP.Z > 0 then
+			local from = Vector2.new(vp.X / 2, vp.Y)
+			local to = Vector2.new(headSP.X, headSP.Y)
+			tracerLine.From = from
+			tracerLine.To = to
+			tracerLine.Visible = true
 
-		local dist = math.floor((tHRP.Position - hrp.Position).Magnitude)
-		espDistLabel.Text = dist .. " studs"
-		espDistLabel.Size = UDim2.new(0, 80, 0, 14)
-		espDistLabel.Position = UDim2.new(0, topSP.X - 40, 0, botSP.Y + 4)
-		espDistLabel.Visible = true
+			local dist = math.floor((tHRP.Position - hrp.Position).Magnitude)
+			local topSP = camera:WorldToViewportPoint(tHRP.Position + Vector3.new(0, 3.2, 0))
+
+			espNameLabel.Text = targetPlayer.Name
+			espNameLabel.Size = UDim2.new(0, 140, 0, 16)
+			espNameLabel.Position = UDim2.new(0, topSP.X - 70, 0, topSP.Y - 20)
+			espNameLabel.Visible = true
+
+			espDistLabel.Text = dist .. " studs"
+			espDistLabel.Size = UDim2.new(0, 100, 0, 14)
+			espDistLabel.Position = UDim2.new(0, headSP.X - 50, 0, headSP.Y + 6)
+			espDistLabel.Visible = true
+		else
+			tracerLine.Visible = false
+			espNameLabel.Visible = false
+			espDistLabel.Visible = false
+		end
 	end)
 end
 
