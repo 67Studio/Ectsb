@@ -172,7 +172,7 @@ frame.Parent = screenGui
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
 
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 32)
+title.Size = UDim2.new(1, -30, 0, 32)
 title.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
 title.Text = "TSB - Target"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -182,21 +182,74 @@ title.BorderSizePixel = 0
 title.Parent = frame
 Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
 
+local btnMinimizar = Instance.new("TextButton")
+btnMinimizar.Size = UDim2.new(0, 28, 0, 28)
+btnMinimizar.Position = UDim2.new(1, -30, 0, 2)
+btnMinimizar.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
+btnMinimizar.Text = "-"
+btnMinimizar.TextColor3 = Color3.fromRGB(255, 255, 255)
+btnMinimizar.Font = Enum.Font.GothamBold
+btnMinimizar.TextSize = 18
+btnMinimizar.BorderSizePixel = 0
+btnMinimizar.Parent = frame
+Instance.new("UICorner", btnMinimizar).CornerRadius = UDim.new(0, 6)
+
+local contentFrame = Instance.new("Frame")
+contentFrame.Size = UDim2.new(1, 0, 1, -32)
+contentFrame.Position = UDim2.new(0, 0, 0, 32)
+contentFrame.BackgroundTransparency = 1
+contentFrame.BorderSizePixel = 0
+contentFrame.Parent = frame
+
+local miniBubble = Instance.new("TextButton")
+miniBubble.Size = UDim2.new(0, 44, 0, 44)
+miniBubble.Position = UDim2.new(0.5, -22, 0.05, 0)
+miniBubble.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
+miniBubble.Text = "TSB"
+miniBubble.TextColor3 = Color3.fromRGB(255, 255, 255)
+miniBubble.Font = Enum.Font.GothamBold
+miniBubble.TextSize = 11
+miniBubble.BorderSizePixel = 0
+miniBubble.Visible = false
+miniBubble.Active = true
+miniBubble.Draggable = true
+miniBubble.Parent = screenGui
+Instance.new("UICorner", miniBubble).CornerRadius = UDim.new(0, 10)
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(255, 80, 80)
+stroke.Thickness = 2
+stroke.Parent = miniBubble
+
+local isMinimized = false
+
+btnMinimizar.MouseButton1Click:Connect(function()
+	isMinimized = true
+	frame.Visible = false
+	miniBubble.Visible = true
+end)
+
+miniBubble.MouseButton1Click:Connect(function()
+	isMinimized = false
+	miniBubble.Visible = false
+	frame.Visible = true
+end)
+
 local targetLabel = Instance.new("TextLabel")
 targetLabel.Size = UDim2.new(0.9, 0, 0, 26)
-targetLabel.Position = UDim2.new(0.05, 0, 0.19, 0)
+targetLabel.Position = UDim2.new(0.05, 0, 0.02, 0)
 targetLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 40)
 targetLabel.Text = "Targeteando: ninguno"
 targetLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
 targetLabel.Font = Enum.Font.GothamBold
 targetLabel.TextSize = 12
 targetLabel.BorderSizePixel = 0
-targetLabel.Parent = frame
+targetLabel.Parent = contentFrame
 Instance.new("UICorner", targetLabel).CornerRadius = UDim.new(0, 6)
 
 local input = Instance.new("TextBox")
 input.Size = UDim2.new(0.9, 0, 0, 30)
-input.Position = UDim2.new(0.05, 0, 0.37, 0)
+input.Position = UDim2.new(0.05, 0, 0.22, 0)
 input.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
 input.Text = ""
 input.PlaceholderText = "Nombre del jugador..."
@@ -206,54 +259,54 @@ input.Font = Enum.Font.Gotham
 input.TextSize = 13
 input.BorderSizePixel = 0
 input.ClearTextOnFocus = false
-input.Parent = frame
+input.Parent = contentFrame
 Instance.new("UICorner", input).CornerRadius = UDim.new(0, 7)
 
 local btnActivar = Instance.new("TextButton")
 btnActivar.Size = UDim2.new(0.44, 0, 0, 30)
-btnActivar.Position = UDim2.new(0.05, 0, 0.56, 0)
+btnActivar.Position = UDim2.new(0.05, 0, 0.46, 0)
 btnActivar.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
 btnActivar.Text = "Activar"
 btnActivar.TextColor3 = Color3.fromRGB(255, 255, 255)
 btnActivar.Font = Enum.Font.GothamBold
 btnActivar.TextSize = 13
 btnActivar.BorderSizePixel = 0
-btnActivar.Parent = frame
+btnActivar.Parent = contentFrame
 Instance.new("UICorner", btnActivar).CornerRadius = UDim.new(0, 7)
 
 local btnStop = Instance.new("TextButton")
 btnStop.Size = UDim2.new(0.44, 0, 0, 30)
-btnStop.Position = UDim2.new(0.51, 0, 0.56, 0)
+btnStop.Position = UDim2.new(0.51, 0, 0.46, 0)
 btnStop.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
 btnStop.Text = "Stop"
 btnStop.TextColor3 = Color3.fromRGB(255, 255, 255)
 btnStop.Font = Enum.Font.GothamBold
 btnStop.TextSize = 13
 btnStop.BorderSizePixel = 0
-btnStop.Parent = frame
+btnStop.Parent = contentFrame
 Instance.new("UICorner", btnStop).CornerRadius = UDim.new(0, 7)
 
 local btnRandom = Instance.new("TextButton")
 btnRandom.Size = UDim2.new(0.9, 0, 0, 30)
-btnRandom.Position = UDim2.new(0.05, 0, 0.74, 0)
+btnRandom.Position = UDim2.new(0.05, 0, 0.67, 0)
 btnRandom.BackgroundColor3 = Color3.fromRGB(120, 60, 200)
 btnRandom.Text = "Target Random"
 btnRandom.TextColor3 = Color3.fromRGB(255, 255, 255)
 btnRandom.Font = Enum.Font.GothamBold
 btnRandom.TextSize = 13
 btnRandom.BorderSizePixel = 0
-btnRandom.Parent = frame
+btnRandom.Parent = contentFrame
 Instance.new("UICorner", btnRandom).CornerRadius = UDim.new(0, 7)
 
 local status = Instance.new("TextLabel")
 status.Size = UDim2.new(1, 0, 0, 18)
-status.Position = UDim2.new(0, 0, 0.9, 0)
+status.Position = UDim2.new(0, 0, 0.88, 0)
 status.BackgroundTransparency = 1
 status.Text = "Esperando..."
 status.TextColor3 = Color3.fromRGB(160, 160, 200)
 status.Font = Enum.Font.Gotham
 status.TextSize = 11
-status.Parent = frame
+status.Parent = contentFrame
 
 local espGui = Instance.new("ScreenGui")
 espGui.Name = "ESPGUI"
@@ -408,6 +461,31 @@ btnRandom.MouseButton1Click:Connect(function()
 	local rand = lista[math.random(1, #lista)]
 	input.Text = rand.Name
 	if setTarget(rand) then MainEnv() end
+end)
+
+-- Auto target si solo hay 1 jugador en el servidor
+spawn(function()
+	task.wait(2)
+	local others = {}
+	for _, p in pairs(game.Players:GetPlayers()) do
+		if p ~= lp then table.insert(others, p) end
+	end
+	if #others == 1 then
+		local solo = others[1]
+		local waited = 0
+		while (not solo.Character or not solo.Character:FindFirstChild("HumanoidRootPart")) and waited < 10 do
+			task.wait(0.5)
+			waited = waited + 0.5
+		end
+		if solo.Character and solo.Character:FindFirstChild("HumanoidRootPart") then
+			input.Text = solo.Name
+			status.Text = "Auto: " .. solo.Name
+			status.TextColor3 = Color3.fromRGB(80, 200, 255)
+			targetLabel.Text = "Targeteando: " .. solo.Name
+			targetLabel.TextColor3 = Color3.fromRGB(80, 255, 120)
+			if setTarget(solo) then MainEnv() end
+		end
+	end
 end)
 
 btnStop.MouseButton1Click:Connect(function()
