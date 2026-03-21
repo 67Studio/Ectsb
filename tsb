@@ -154,6 +154,7 @@ task.wait(.01) end end)
 
 local playerGui = lp:WaitForChild("PlayerGui")
 pcall(function() playerGui:FindFirstChild("TargetGUI"):Destroy() end)
+pcall(function() playerGui:FindFirstChild("ESPGUI"):Destroy() end)
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TargetGUI"
@@ -161,8 +162,8 @@ screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 390, 0, 230)
-frame.Position = UDim2.new(0.5, -195, 0.05, 0)
+frame.Size = UDim2.new(0, 260, 0, 195)
+frame.Position = UDim2.new(0.5, -130, 0.05, 0)
 frame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
 frame.BorderSizePixel = 0
 frame.Active = true
@@ -181,52 +182,21 @@ title.BorderSizePixel = 0
 title.Parent = frame
 Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
 
-local viewport = Instance.new("ViewportFrame")
-viewport.Size = UDim2.new(0, 115, 0, 185)
-viewport.Position = UDim2.new(0, 8, 0, 38)
-viewport.BackgroundColor3 = Color3.fromRGB(20, 20, 35)
-viewport.BorderSizePixel = 0
-viewport.Ambient = Color3.fromRGB(255, 255, 255)
-viewport.LightColor = Color3.fromRGB(255, 255, 255)
-viewport.LightDirection = Vector3.new(-1, -2, -1)
-viewport.Parent = frame
-Instance.new("UICorner", viewport).CornerRadius = UDim.new(0, 8)
-
-local vpCamera = Instance.new("Camera")
-vpCamera.Parent = viewport
-viewport.CurrentCamera = vpCamera
-
-local noTargetLabel = Instance.new("TextLabel")
-noTargetLabel.Size = UDim2.new(1, 0, 1, 0)
-noTargetLabel.BackgroundTransparency = 1
-noTargetLabel.Text = "Sin\ntarget"
-noTargetLabel.TextColor3 = Color3.fromRGB(100, 100, 130)
-noTargetLabel.Font = Enum.Font.GothamBold
-noTargetLabel.TextSize = 13
-noTargetLabel.TextXAlignment = Enum.TextXAlignment.Center
-noTargetLabel.Parent = viewport
-
-local rightPanel = Instance.new("Frame")
-rightPanel.Size = UDim2.new(0, 255, 0, 185)
-rightPanel.Position = UDim2.new(0, 130, 0, 38)
-rightPanel.BackgroundTransparency = 1
-rightPanel.Parent = frame
-
 local targetLabel = Instance.new("TextLabel")
-targetLabel.Size = UDim2.new(1, 0, 0, 26)
-targetLabel.Position = UDim2.new(0, 0, 0, 0)
+targetLabel.Size = UDim2.new(0.9, 0, 0, 26)
+targetLabel.Position = UDim2.new(0.05, 0, 0.19, 0)
 targetLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 40)
 targetLabel.Text = "Targeteando: ninguno"
 targetLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
 targetLabel.Font = Enum.Font.GothamBold
 targetLabel.TextSize = 12
 targetLabel.BorderSizePixel = 0
-targetLabel.Parent = rightPanel
+targetLabel.Parent = frame
 Instance.new("UICorner", targetLabel).CornerRadius = UDim.new(0, 6)
 
 local input = Instance.new("TextBox")
-input.Size = UDim2.new(1, 0, 0, 30)
-input.Position = UDim2.new(0, 0, 0, 32)
+input.Size = UDim2.new(0.9, 0, 0, 30)
+input.Position = UDim2.new(0.05, 0, 0.37, 0)
 input.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
 input.Text = ""
 input.PlaceholderText = "Nombre del jugador..."
@@ -236,91 +206,174 @@ input.Font = Enum.Font.Gotham
 input.TextSize = 13
 input.BorderSizePixel = 0
 input.ClearTextOnFocus = false
-input.Parent = rightPanel
+input.Parent = frame
 Instance.new("UICorner", input).CornerRadius = UDim.new(0, 7)
 
 local btnActivar = Instance.new("TextButton")
-btnActivar.Size = UDim2.new(0.48, 0, 0, 30)
-btnActivar.Position = UDim2.new(0, 0, 0, 68)
+btnActivar.Size = UDim2.new(0.44, 0, 0, 30)
+btnActivar.Position = UDim2.new(0.05, 0, 0.56, 0)
 btnActivar.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
 btnActivar.Text = "Activar"
 btnActivar.TextColor3 = Color3.fromRGB(255, 255, 255)
 btnActivar.Font = Enum.Font.GothamBold
 btnActivar.TextSize = 13
 btnActivar.BorderSizePixel = 0
-btnActivar.Parent = rightPanel
+btnActivar.Parent = frame
 Instance.new("UICorner", btnActivar).CornerRadius = UDim.new(0, 7)
 
 local btnStop = Instance.new("TextButton")
-btnStop.Size = UDim2.new(0.48, 0, 0, 30)
-btnStop.Position = UDim2.new(0.52, 0, 0, 68)
+btnStop.Size = UDim2.new(0.44, 0, 0, 30)
+btnStop.Position = UDim2.new(0.51, 0, 0.56, 0)
 btnStop.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
 btnStop.Text = "Stop"
 btnStop.TextColor3 = Color3.fromRGB(255, 255, 255)
 btnStop.Font = Enum.Font.GothamBold
 btnStop.TextSize = 13
 btnStop.BorderSizePixel = 0
-btnStop.Parent = rightPanel
+btnStop.Parent = frame
 Instance.new("UICorner", btnStop).CornerRadius = UDim.new(0, 7)
 
 local btnRandom = Instance.new("TextButton")
-btnRandom.Size = UDim2.new(1, 0, 0, 30)
-btnRandom.Position = UDim2.new(0, 0, 0, 104)
+btnRandom.Size = UDim2.new(0.9, 0, 0, 30)
+btnRandom.Position = UDim2.new(0.05, 0, 0.74, 0)
 btnRandom.BackgroundColor3 = Color3.fromRGB(120, 60, 200)
 btnRandom.Text = "Target Random"
 btnRandom.TextColor3 = Color3.fromRGB(255, 255, 255)
 btnRandom.Font = Enum.Font.GothamBold
 btnRandom.TextSize = 13
 btnRandom.BorderSizePixel = 0
-btnRandom.Parent = rightPanel
+btnRandom.Parent = frame
 Instance.new("UICorner", btnRandom).CornerRadius = UDim.new(0, 7)
 
 local status = Instance.new("TextLabel")
 status.Size = UDim2.new(1, 0, 0, 18)
-status.Position = UDim2.new(0, 0, 0, 140)
+status.Position = UDim2.new(0, 0, 0.9, 0)
 status.BackgroundTransparency = 1
 status.Text = "Esperando..."
 status.TextColor3 = Color3.fromRGB(160, 160, 200)
 status.Font = Enum.Font.Gotham
 status.TextSize = 11
-status.Parent = rightPanel
+status.Parent = frame
 
-local vpClone = nil
-local vpConnection = nil
+local espGui = Instance.new("ScreenGui")
+espGui.Name = "ESPGUI"
+espGui.ResetOnSpawn = false
+espGui.IgnoreGuiInset = true
+espGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+espGui.Parent = playerGui
 
-local function updateViewport(targetPlayer)
-	if vpClone then vpClone:Destroy() vpClone = nil end
-	if vpConnection then vpConnection:Disconnect() vpConnection = nil end
-	noTargetLabel.Visible = true
-	if not targetPlayer or not targetPlayer.Character then return end
-	local tChar = targetPlayer.Character
-	local cloneOk, clone = pcall(function() return tChar:Clone() end)
-	if not cloneOk then return end
-	vpClone = clone
-	vpClone.Parent = viewport
-	noTargetLabel.Visible = false
-	pcall(function()
-		for _, v in pairs(vpClone:GetDescendants()) do
-			if v:IsA("Script") or v:IsA("LocalScript") then v:Destroy() end
-		end
-	end)
-	local root = vpClone:FindFirstChild("HumanoidRootPart")
-	if root then
-		vpCamera.CFrame = CFrame.new(
-			root.Position + Vector3.new(0, 1, 4.5),
-			root.Position + Vector3.new(0, 1, 0)
-		)
-	end
-	vpConnection = game:GetService("RunService").RenderStepped:Connect(function()
-		if not targetPlayer or not targetPlayer.Character then return end
-		for _, part in pairs(vpClone:GetDescendants()) do
-			if part:IsA("BasePart") then
-				local live = targetPlayer.Character:FindFirstChild(part.Name)
-				if live and live:IsA("BasePart") then
-					part.CFrame = live.CFrame
-				end
-			end
-		end
+local function makeLine(color)
+	local l = Instance.new("Frame")
+	l.BackgroundColor3 = color
+	l.BorderSizePixel = 0
+	l.AnchorPoint = Vector2.new(0.5, 0.5)
+	l.Parent = espGui
+	l.Visible = false
+	return l
+end
+
+local espColor = Color3.fromRGB(255, 50, 50)
+local lineTop    = makeLine(espColor)
+local lineBottom = makeLine(espColor)
+local lineLeft   = makeLine(espColor)
+local lineRight  = makeLine(espColor)
+local tracer     = makeLine(Color3.fromRGB(255, 200, 0))
+
+local espNameLabel = Instance.new("TextLabel")
+espNameLabel.BackgroundTransparency = 1
+espNameLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
+espNameLabel.Font = Enum.Font.GothamBold
+espNameLabel.TextSize = 13
+espNameLabel.TextStrokeTransparency = 0
+espNameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+espNameLabel.Visible = false
+espNameLabel.Parent = espGui
+
+local espDistLabel = Instance.new("TextLabel")
+espDistLabel.BackgroundTransparency = 1
+espDistLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+espDistLabel.Font = Enum.Font.Gotham
+espDistLabel.TextSize = 11
+espDistLabel.TextStrokeTransparency = 0
+espDistLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+espDistLabel.Visible = false
+espDistLabel.Parent = espGui
+
+local camera = workspace.CurrentCamera
+local RS = game:GetService("RunService")
+
+local function worldToScreen(pos)
+	local sp, onScreen = camera:WorldToViewportPoint(pos)
+	return Vector2.new(sp.X, sp.Y), onScreen
+end
+
+local function setBox(line, x, y, w, h)
+	line.Position = UDim2.new(0, x, 0, y)
+	line.Size = UDim2.new(0, w, 0, h)
+	line.Visible = true
+end
+
+local function drawTracer(from, to)
+	local dx = to.X - from.X
+	local dy = to.Y - from.Y
+	local len = math.sqrt(dx*dx + dy*dy)
+	tracer.Position = UDim2.new(0, from.X + dx/2, 0, from.Y + dy/2)
+	tracer.Size = UDim2.new(0, len, 0, 2)
+	tracer.Rotation = math.deg(math.atan2(dy, dx))
+	tracer.Visible = true
+end
+
+local function hideESP()
+	lineTop.Visible = false lineBottom.Visible = false
+	lineLeft.Visible = false lineRight.Visible = false
+	tracer.Visible = false
+	espNameLabel.Visible = false espDistLabel.Visible = false
+end
+
+local espConnection = nil
+
+local function startESP(targetPlayer)
+	if espConnection then espConnection:Disconnect() espConnection = nil end
+	hideESP()
+	if not targetPlayer then return end
+
+	espConnection = RS.RenderStepped:Connect(function()
+		if not targetPlayer or not targetPlayer.Character then hideESP() return end
+		local tChar = targetPlayer.Character
+		local tHRP = tChar:FindFirstChild("HumanoidRootPart")
+		local tHead = tChar:FindFirstChild("Head")
+		if not tHRP or not tHead then hideESP() return end
+
+		local topSP, topOn   = worldToScreen(tHRP.Position + Vector3.new(0, 3.2, 0))
+		local botSP, botOn   = worldToScreen(tHRP.Position + Vector3.new(0, -3.2, 0))
+		if not topOn and not botOn then hideESP() return end
+
+		local boxH = math.abs(botSP.Y - topSP.Y)
+		local boxW = boxH * 0.55
+		local boxX = topSP.X - boxW / 2
+		local boxY = topSP.Y
+		local thick = 2
+
+		setBox(lineTop,    boxX,         boxY,          boxW, thick)
+		setBox(lineBottom, boxX,         boxY + boxH,   boxW, thick)
+		setBox(lineLeft,   boxX,         boxY,          thick, boxH + thick)
+		setBox(lineRight,  boxX + boxW,  boxY,          thick, boxH + thick)
+
+		local vp = camera.ViewportSize
+		local screenBot = Vector2.new(vp.X / 2, vp.Y)
+		local headSP = worldToScreen(tHead.Position)
+		drawTracer(screenBot, headSP)
+
+		espNameLabel.Text = targetPlayer.Name
+		espNameLabel.Size = UDim2.new(0, 120, 0, 16)
+		espNameLabel.Position = UDim2.new(0, topSP.X - 60, 0, topSP.Y - 18)
+		espNameLabel.Visible = true
+
+		local dist = math.floor((tHRP.Position - hrp.Position).Magnitude)
+		espDistLabel.Text = dist .. " studs"
+		espDistLabel.Size = UDim2.new(0, 80, 0, 14)
+		espDistLabel.Position = UDim2.new(0, topSP.X - 40, 0, botSP.Y + 4)
+		espDistLabel.Visible = true
 	end)
 end
 
@@ -336,7 +389,7 @@ local function setTarget(found)
 	status.Text = "Activo en: " .. found.Name
 	status.TextColor3 = Color3.fromRGB(80, 255, 120)
 	btnActivar.BackgroundColor3 = Color3.fromRGB(20, 160, 50)
-	updateViewport(found)
+	startESP(found)
 	return true
 end
 
@@ -349,10 +402,7 @@ btnActivar.MouseButton1Click:Connect(function()
 	end
 	local found = nil
 	for _, p in pairs(game.Players:GetPlayers()) do
-		if p ~= lp and p.Name:lower():find(targetName:lower()) then
-			found = p
-			break
-		end
+		if p ~= lp and p.Name:lower():find(targetName:lower()) then found = p break end
 	end
 	if setTarget(found) then MainEnv() end
 end)
@@ -383,7 +433,7 @@ btnStop.MouseButton1Click:Connect(function()
 	targetLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
 	status.Text = "Detenido"
 	status.TextColor3 = Color3.fromRGB(255, 80, 80)
-	updateViewport(nil)
+	startESP(nil)
 end)
 
 function MainEnv()
