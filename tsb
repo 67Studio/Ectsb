@@ -498,14 +498,26 @@ getgenv().CameraShaker:Start()
 
 game.Players.LocalPlayer.Character:SetAttribute("UltimateName", string.upper('Hollow Point'))
 
-local v = game:GetService("ReplicatedStorage").Emotes.gun2:Clone()
-v.Parent = char
-v.CanCollide = false
+local sword = Instance.new("Part")
+sword.Name = "Sword"
+sword.Size = Vector3.new(0.2, 0.2, 4)
+sword.Material = Enum.Material.SmoothPlastic
+sword.BrickColor = BrickColor.new("Institutional white")
+sword.CanCollide = false
+sword.CastShadow = false
+sword.Parent = char
+
+local swordMesh = Instance.new("SpecialMesh", sword)
+swordMesh.MeshType = Enum.MeshType.FileMesh
+swordMesh.MeshId = "rbxassetid://9756362"
+swordMesh.TextureId = "rbxassetid://9756360"
+swordMesh.Scale = Vector3.new(1, 1, 1)
+
 local weld = Instance.new("Weld")
-weld.Parent = char['Left Arm']
-weld.Part0 = v
-weld.Part1 = char['Left Arm']
-weld.C1 = CFrame.new(0,-1.3,-.5)*CFrame.Angles(math.rad(-90),math.rad(0),0)
+weld.Parent = char['Right Arm']
+weld.Part0 = sword
+weld.Part1 = char['Right Arm']
+weld.C1 = CFrame.new(0, -1.5, 0) * CFrame.Angles(math.rad(90), 0, math.rad(180))
 
 local ye
 AddSignal(char:GetAttributeChangedSignal('LastM1Hitted'):Connect(function()
@@ -658,7 +670,7 @@ HitCounter.Visible = true
 DamageCounter.Visible = true
 HitCounter.TextSize = 155
 HitCounter.TextColor3 = Color3.new(1,1,1-Hits.Value/255)
-DamageCounter.Text = math.floor(Dmg.Value)..' Damage!'
+DamageCounter.Text = math.floor(Dmg.Value)..' Toxicity!'
 DamageCounter.TextSize = 155
 HitCounter.Text = Hits.Value..' Hits!'
 DamageCounter.TextColor3 = Color3.new(1,1-Dmg.Value/100,1-Dmg.Value/100)
